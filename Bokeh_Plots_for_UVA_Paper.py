@@ -39,8 +39,10 @@ def readFirstFourAttacks():
 
 # Reads and Plots MAT data for Attack 5
 def readTempData():
-    stress=[[]]
-    strain=[[]]
+    stress=[[],[],[],[],[]]
+    stressMatrix=[[],[],[],[],[]]
+    strain=[[],[],[],[],[]]
+    strainMatrix=[[],[],[],[],[]]
     attacks=['190C','200C','210C','220C','230C']
     legendColors=['navy','olive','firebrick','orange','purple']
     i=int(1)
@@ -56,15 +58,20 @@ def readTempData():
     p.yaxis.axis_label_text_font_size='26pt'
     p.yaxis.major_label_text_font_size='24pt'
     p.min_border=35
+
+    # Load the attack case files into an array
     for x in attacks:
         # Load the mat file for each temperature
         mat = sio.loadmat('Attack_5_'+x+'.mat')
         # Iterate through all five specimens
         # Assign values for stress and strain from the MAT file
-        stress[i-1]=np.matrix(mat['Temp_Test_Batch_'+str(i)+'_'+x]['stress'][0][0]).mean(1)
-        strain[i-1]=np.matrix(mat['Temp_Test_Batch_'+str(i)+'_'+x]['strain'][0][0]).mean(1)
+        stressMatrix[i-1]=np.matrix(mat['Temp_Test_Batch_'+str(i)+'_'+x]['stress'][0][0]).mean(1).tolist()
+        stress[i-1]=[x[0] for x in stressMatrix[i-1]]
+        strainMatrix[i-1]=np.matrix(mat['Temp_Test_Batch_'+str(i)+'_'+x]['strain'][0][0]).mean(1).tolist()
+        strain[i-1]=[x[0] for x in strainMatrix[i-1]]
         i=i+1
-    p.line(strain,stress, legend=None, line_width=1)
+    for j in range(5):
+        p.line(strain[j],stress[j], legend=None, line_width=2, line_color=legendColors[j])
     # Write output files
     outputWrite='Plot.png'
     show(p)
