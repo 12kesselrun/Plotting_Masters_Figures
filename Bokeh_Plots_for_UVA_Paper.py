@@ -39,40 +39,35 @@ def readFirstFourAttacks():
 
 # Reads and Plots MAT data for Attack 5
 def readTempData():
-    stress=[]
-    strain=[]
+    stress=[[]]
+    strain=[[]]
     attacks=['190C','200C','210C','220C','230C']
-    # Create a dictionary to store each figure in
-    p={}
     legendColors=['navy','olive','firebrick','orange','purple']
     i=int(1)
     # Iterate through all 5 temperature attacks (190C-230C)
     p = figure(width=900, plot_height=600, title='Temperature Attacks', x_axis_label='Strain', y_axis_label='Stress (MPa)', x_range=(0,0.0225), y_range=(0,34))
+    # Format the Bokeh plots for the temperature graphs
+    output_file("Attack_5.html")
+    p.title.text_font='Segoe UI'
+    p.title.text_font_size='26pt'
+    p.title.align='center'
+    p.xaxis.axis_label_text_font_size='26pt'
+    p.xaxis.major_label_text_font_size='24pt'
+    p.yaxis.axis_label_text_font_size='26pt'
+    p.yaxis.major_label_text_font_size='24pt'
+    p.min_border=35
     for x in attacks:
-        # Format the Bokeh plots for the temperature graphs
-        output_file("Attack_5.html")
-        p.title.text_font='Segoe UI'
-        p.title.text_font_size='26pt'
-        p.title.align='center'
-        p.xaxis.axis_label_text_font_size='26pt'
-        p.xaxis.major_label_text_font_size='24pt'
-        p.yaxis.axis_label_text_font_size='26pt'
-        p.yaxis.major_label_text_font_size='24pt'
-        p.min_border=35
         # Load the mat file for each temperature
         mat = sio.loadmat('Attack_5_'+x+'.mat')
         # Iterate through all five specimens
-        for specimen in range(5):
-            # print("Specmimen:",specimen+1)
-            # Assign values for stress and strain from the MAT file
-            stress[x]=stress[x]+mat['Temp_Test_Batch_'+str(i)+'_'+x]['stress'][0][0][:,specimen]
-            strain[x]=strain[x]+mat['Temp_Test_Batch_'+str(i)+'_'+x]['strain'][0][0][:,specimen]
-        stress[x]=stress[x]/5.0
-        strain[x]=strain[x]/5.0
+        # Assign values for stress and strain from the MAT file
+        stress[i-1]=np.matrix(mat['Temp_Test_Batch_'+str(i)+'_'+x]['stress'][0][0]).mean(1)
+        strain[i-1]=np.matrix(mat['Temp_Test_Batch_'+str(i)+'_'+x]['strain'][0][0]).mean(1)
         i=i+1
-    p.line(strain,stress, legend=None, line_width=1,line_color=legendColors[specimen])
+    p.line(strain,stress, legend=None, line_width=1)
     # Write output files
     outputWrite='Plot.png'
+    show(p)
     # export_png(p,filename=outputWrite)
     print("Finished Writing File: "+outputWrite)
     reset_output()
