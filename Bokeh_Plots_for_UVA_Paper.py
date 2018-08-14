@@ -39,45 +39,44 @@ def readFirstFourAttacks():
 
 # Reads and Plots MAT data for Attack 5
 def readTempData():
+    stress=[]
+    strain=[]
     attacks=['190C','200C','210C','220C','230C']
     # Create a dictionary to store each figure in
     p={}
     legendColors=['navy','olive','firebrick','orange','purple']
-    titles=['Lowered to 190C','Lowered to 200C','Control - 210C','Raised to 220C','Raised to 230C']
     i=int(1)
     # Iterate through all 5 temperature attacks (190C-230C)
+    p = figure(width=900, plot_height=600, title='Temperature Attacks', x_axis_label='Strain', y_axis_label='Stress (MPa)', x_range=(0,0.0225), y_range=(0,34))
     for x in attacks:
         # Format the Bokeh plots for the temperature graphs
-        p[x] = figure(width=900, plot_height=600, title=titles[i-1],x_axis_label='Strain',y_axis_label='Stress (MPa)',x_range=(0,0.0225), y_range=(0,34))
-        output_file("Attack_5_"+x+".html")
-        p[x].title.text_font='Segoe UI'
-        p[x].title.text_font_size='26pt'
-        p[x].title.align='center'
-        p[x].xaxis.axis_label_text_font_size='26pt'
-        p[x].xaxis.major_label_text_font_size='24pt'
-        p[x].yaxis.axis_label_text_font_size='26pt'
-        p[x].yaxis.major_label_text_font_size='24pt'
-        p[x].min_border=35
+        output_file("Attack_5.html")
+        p.title.text_font='Segoe UI'
+        p.title.text_font_size='26pt'
+        p.title.align='center'
+        p.xaxis.axis_label_text_font_size='26pt'
+        p.xaxis.major_label_text_font_size='24pt'
+        p.yaxis.axis_label_text_font_size='26pt'
+        p.yaxis.major_label_text_font_size='24pt'
+        p.min_border=35
         # Load the mat file for each temperature
         mat = sio.loadmat('Attack_5_'+x+'.mat')
         # Iterate through all five specimens
         for specimen in range(5):
             # print("Specmimen:",specimen+1)
             # Assign values for stress and strain from the MAT file
-            stress=mat['Temp_Test_Batch_'+str(i)+'_'+x]['stress'][0][0][:,specimen]
-            strain=mat['Temp_Test_Batch_'+str(i)+'_'+x]['strain'][0][0][:,specimen]
-            p[x].line(strain,stress, legend=None, line_width=1,line_color=legendColors[specimen])
+            stress[x]=stress[x]+mat['Temp_Test_Batch_'+str(i)+'_'+x]['stress'][0][0][:,specimen]
+            strain[x]=strain[x]+mat['Temp_Test_Batch_'+str(i)+'_'+x]['strain'][0][0][:,specimen]
+        stress[x]=stress[x]/5.0
+        strain[x]=strain[x]/5.0
         i=i+1
-        # Write output files
-        outputWrite='Plot_'+x+'.png'
-        # export_png(p,filename=outputWrite)
-        print("Finished Writing File: "+outputWrite)
-        reset_output()
-    # Debugging
-    # l=gridplot([[p['190C']],[p['200C']],[p['210C']],[p['220C']],[p['230C']]])   # Vertical
-    l=gridplot([[p['190C'],p['200C']],[p['210C'],None],[p['220C'],p['230C']]])   # Horizontal
+    p.line(strain,stress, legend=None, line_width=1,line_color=legendColors[specimen])
+    # Write output files
+    outputWrite='Plot.png'
+    # export_png(p,filename=outputWrite)
+    print("Finished Writing File: "+outputWrite)
+    reset_output()
     # export_png(l,filename='Gridplot.png')
-    show(l)
 '''
 Bokeh_Plots_for_UVA_Paper.py
 Notes:
