@@ -1,12 +1,12 @@
 # Reads and Plots MAT data for Attacks 1-4
-def readFirstFourAttacks():
-    attacks=['SHD_XY','Solid_XY','Solid_XZ','Solid_XZ_with_Notch','Solid_XZ_with_Seam']
+def NotchAndSeamAttacks():
+    attacks=['Solid_XZ','Solid_XZ_with_Notch','Solid_XZ_with_Seam']
     # Create a dictionary to store each figure
     f={}
     legendColors=['navy','olive','firebrick','orange','purple','red']
-    titles=['Density Adjustment','Orientation Change','Control Specimen','Notch Insertion','Seam Placement']
+    titles=['On-Edge Control Specimen','Notch Insertion','Seam Placement']
     i=int(1)
-    # Load the mat file for each temperature
+    # Load the mat file for all of the attacks
     mat = sio.loadmat('Tensile_Test_Data.mat')
     # Iterate through attacks
     for x in attacks:
@@ -20,13 +20,13 @@ def readFirstFourAttacks():
         f[x].xaxis.major_label_text_font_size='24pt'
         f[x].yaxis.axis_label_text_font_size='26pt'
         f[x].yaxis.major_label_text_font_size='24pt'
-        nums=np.array([[0,1,2,3,4,5],[None,1,2,3,4,5],[0,1,2,3,4,5],[0,1,2,4,5,None],[0,1,2,3,4,5]])
-        # Iterate through all five specimens
+        nums=np.array([[0,1,2,3,4,5],[0,1,2,4,5,None],[0,1,2,3,4,5]])
+        # Iterate through all five specimens (nums designates which specimens are being used for each attack case)
         for specimen in nums[i-1,:]:
             if specimen!=None:
                 # Assign values for stress and strain from the MAT file. The mean() function averages the data for each specimen to show only one solid line
-                stressMatrix=np.matrix(mat[x]['stress'][0][0]).mean(1).tolist()
-                stress=[x[0] for x in stressMatrix]
+                stressMatrix=np.matrix(mat[x]['stress'][0][0]).mean(1).tolist() # Average across the specimens using the numpy matrix mean() function then strip of matrix notation
+                stress=[x[0] for x in stressMatrix]                             # Reorient the matrix from N-by-1 to 1-by-N
                 strainMatrix=np.matrix(mat[x]['strain'][0][0]).mean(1).tolist()
                 strain=[x[0] for x in strainMatrix]
         f[x].line(strain,stress, legend=None, line_width=1,line_color='blue')
@@ -114,5 +114,5 @@ os.system('cls')
 ######                                MAIN                                ######
 ################################################################################
 
-readFirstFourAttacks()
+NotchAndSeamAttacks()
 # readTempData()
