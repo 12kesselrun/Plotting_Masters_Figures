@@ -25,17 +25,19 @@ def readFirstFourAttacks():
         for specimen in nums[i-1,:]:
             if specimen!=None:
                 # Assign values for stress and strain from the MAT file
-                stress=mat[x]['stress'][0][0][:,specimen]
-                strain=mat[x]['strain'][0][0][:,specimen]
-                f[x].line(strain,stress, legend=None, line_width=1,line_color=legendColors[specimen])
+                stressMatrix=np.matrix(mat[x]['stress'][0][0]).mean(1).tolist()
+                stress=[x[0] for x in stressMatrix]
+                strainMatrix=np.matrix(mat[x]['strain'][0][0]).mean(1).tolist()
+                strain=[x[0] for x in strainMatrix]
+        f[x].line(strain,stress, legend=None, line_width=1,line_color=legendColors[specimen])
         i=i+1
         # Write output files
         outputWrite='Plot_'+x+'.png'
-        export_png(f[x],filename=outputWrite)
+        # export_png(f[x],filename=outputWrite)
         print("Finished Writing File: "+outputWrite)
         reset_output()
         # Debugging
-        #show(f[x])
+        show(f[x])
 
 # Reads and Plots MAT data for Attack 5
 def readTempData():
@@ -113,4 +115,4 @@ os.system('cls')
 ################################################################################
 
 readFirstFourAttacks()
-readTempData()
+# readTempData()
