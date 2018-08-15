@@ -1,11 +1,11 @@
 # Most Recent Updates:
-- Changed temperature attacks to show averaged data instead of individual specimen lines
-- Adjusted the legend formatting
-- Synched up the titles of all the plots
+- Changed all attacks to show averaged tensile testing results instead of one line for each specimen
 
-# Bugs:
-- None yet...
+# Bug Fixes:
+- Fixed the first three plots being "control specimen" by moving reset_output after "show"
+- Fixed the error from the show on plots 4 and 5 by setting to a static line color (problem with indexing)
 
 # To Do:
-- Change Attacks 1-4 to show averaged data (should I also overlay the data?)
-- Overlay Control specimen data on each attack test?
+- Overlay Control specimen data on each attack test (make it see through, different color, and wider than the attack specimen data)
+- Remove the outliers in the second plot
+- Overlay Attacks 2-4 on top of each other
