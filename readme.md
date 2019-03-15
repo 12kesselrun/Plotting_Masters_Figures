@@ -2,8 +2,7 @@
 - Segmented code a little bit more. Now there is one method that plots the On-Edge Control, Notch, and Seam attacks (all in the same .MAT file). A separate method will plot the support material attack against the On-Edge Control. Yet another method will plot the Density change attack against the Flat Control. A final method plots the temperature attack specimens all overlaid for visual clarity.
 
 # Bug Fixes:
-- Fixed the first three plots being "control specimen" by moving reset_output after "show"
-- Fixed the error from the show on plots 4 and 5 by setting to a static line color (problem with indexing)
+- Added "mode='inline'" so that you could run this code without a network connection
 
 # To Do:
 - Overlay Control specimen data on each attack test (make it see through, different color, and wider than the attack specimen data)

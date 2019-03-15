@@ -12,7 +12,7 @@ def NotchAndSeamAttacks():
     for x in attacks:
         # Format the Bokeh plots for the temperature graphs
         f[x]= figure(width=900, plot_height=600, title=titles[i-1] + ' ASTM D638 Results',x_axis_label='Strain',y_axis_label='Stress (MPa)',x_range=(0,0.0825), y_range=(0,34))
-        output_file("Attack_"+str(i)+"_"+x+".html")
+        output_file("Attack_"+str(i)+"_"+x+".html", mode='inline')
         f[x].title.text_font='Segoe UI'
         f[x].title.text_font_size='26pt'
         f[x].title.align='center'
@@ -32,11 +32,11 @@ def NotchAndSeamAttacks():
         f[x].line(strain,stress, legend=None, line_width=1,line_color='blue')
         i=i+1
         # Write output files
-        outputWrite='Plot_'+x+'.png'
-        export_png(f[x],filename=outputWrite)
-        print("Finished Writing File: "+outputWrite)
+        # outputWrite='Plot_'+x+'.png'
+        # export_png(f[x],filename=outputWrite)
+        # print("Finished Writing File: "+outputWrite)
         # Debugging
-        # show(f[x])
+        show(f[x])
         reset_output()
 
 # Reads and Plots MAT data for Attack 5
@@ -91,8 +91,8 @@ def readTempData():
 '''
 Bokeh_Plots_for_UVA_Paper.py
 Notes:
-- This code plots the MATLAB data files saved from
-- Move this python code into the working directory and change the "fileName" variable in the "Constants" section below
+- This code plots the MATLAB data files saved from my Master's Tensile Testing
+- Move this python code into the working directory
 
 Install Requirements:
 - Python 3.6 or newer
